@@ -1,15 +1,15 @@
 //
-//  NSDictionary+MCSCollectionUtilities.m
-//  MCSCollectionUtilities
+//  NSDictionary+MCSCollectionUtility.m
+//  MCSCollectionUtility
 //
-//  Created by Rafal Augustyniak on 15.03.2014.
+//  Created by Rafał Augustyniak on 15.03.2014.
 //  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
-#import "NSDictionary+MCSCollectionUtilities.h"
-#import "NSArray+MCSCollectionUtilities.h"
+#import "NSDictionary+MCSCollectionUtility.h"
+#import "NSArray+MCSCollectionUtility.h"
 
-@implementation NSDictionary (MCSCollectionUtilities)
+@implementation NSDictionary (MCSCollectionUtility)
 
 - (void)mcs_each:(void (^)(id <NSCopying>, id))block
 {

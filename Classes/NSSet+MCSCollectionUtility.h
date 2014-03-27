@@ -1,14 +1,14 @@
 //
-//  NSSet+MCSCollectionUtilities.h
-//  MCSCollectionUtilities
+//  NSSet+MCSCollectionUtility.h
+//  MCSCollectionUtility
 //
-//  Created by Rafał on 18.03.2014.
+//  Created by Rafał Augustyniak on 18.03.2014.
 //  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface NSSet (MCSCollectionUtilities)
+@interface NSSet (MCSCollectionUtility)
 
 - (NSArray *)mcs_sort:(NSComparator)block;
 

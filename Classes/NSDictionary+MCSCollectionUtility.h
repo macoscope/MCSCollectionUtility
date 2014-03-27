@@ -1,14 +1,14 @@
 //
-//  NSDictionary+MCSCollectionUtilities.h
-//  MCSCollectionUtilities
+//  NSDictionary+MCSCollectionUtility.h
+//  MCSCollectionUtility
 //
-//  Created by Rafal Augustyniak on 15.03.2014.
+//  Created by Rafał Augustyniak on 15.03.2014.
 //  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (MCSCollectionUtilities)
+@interface NSDictionary (MCSCollectionUtility)
 
 - (void)mcs_each:(void(^)(id <NSCopying> key, id object))block;
 

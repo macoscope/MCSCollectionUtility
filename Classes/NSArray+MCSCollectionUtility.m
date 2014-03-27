@@ -1,14 +1,14 @@
 //
-//  NSArray+MCSCollectionUtilities.m
-//  MCSCollectionUtilities
+//  NSArray+MCSCollectionUtility.m
+//  MCSCollectionUtility
 //
-//  Created by Rafał on 12.03.2014.
+//  Created by Rafał Augustyniak on 12.03.2014.
 //  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
-#import "NSArray+MCSCollectionUtilities.h"
+#import "NSArray+MCSCollectionUtility.h"
 
-@implementation NSArray (MCSCollectionUtilities)
+@implementation NSArray (MCSCollectionUtility)
 
 - (NSArray *)mcs_take:(NSInteger)number
 {

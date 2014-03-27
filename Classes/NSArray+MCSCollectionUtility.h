@@ -1,14 +1,14 @@
 //
-//  NSArray+MCSCollectionUtilities.h
-//  MCSCollectionUtilities
+//  NSArray+MCSCollectionUtility.h
+//  MCSCollectionUtility
 //
-//  Created by Rafał on 12.03.2014.
+//  Created by Rafał Augustyniak on 12.03.2014.
 //  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface NSArray (MCSCollectionUtilities)
+@interface NSArray (MCSCollectionUtility)
 
 - (void)mcs_each:(void(^)(id object))block;
 - (void)mcs_eachWithIndex:(void(^)(id object, NSUInteger index))block;

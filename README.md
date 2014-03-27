@@ -1,13 +1,13 @@
 
 
 
-##MCSCollectionUtilities
+##MCSCollectionUtility
 
 Categories for `NSArray`, `NSSet` and `NSDictionary` which provide many methods which make operations on collection easier and cleaner. 
 
 ##Installation
 
-To use MCSCollectionUtility in your app. just drag 'Classes' folder to yout project and import 'MCSCollectionUtility.h' file
+To use MCSCollectionUtility in your app just drag 'Classes' folder to yout project and import 'MCSCollectionUtility.h' file.
 
     #import "MCSCollectionUtility.h"
     
