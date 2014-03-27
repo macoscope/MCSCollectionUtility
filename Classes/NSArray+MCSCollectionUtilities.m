@@ -1,14 +1,14 @@
 //
-//  NSArray+MCKOperations.m
-//  MCKCOllectionsOperations
+//  NSArray+MCSCollectionUtilities.m
+//  MCSCollectionUtilities
 //
 //  Created by Rafał on 12.03.2014.
-//  Copyright (c) 2014 Rafał. All rights reserved.
+//  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
-#import "NSArray+MCSUtilities.h"
+#import "NSArray+MCSCollectionUtilities.h"
 
-@implementation NSArray (MCKOperations)
+@implementation NSArray (MCSCollectionUtilities)
 
 - (NSArray *)mcs_take:(NSInteger)number
 {
@@ -35,7 +35,7 @@
 
 - (NSArray *)mcs_skip:(NSInteger)number
 {
-  return [[self mcs_shuffle:-number] mcs_take:([self count] - number)];
+  return [[self mcs_rotate:-number] mcs_take:([self count] - number)];
 }
 
 - (NSArray *)mcs_skipWhile:(BOOL (^)(id))block
@@ -50,9 +50,8 @@
     return [NSArray array];
   }
   
-  return [[self mcs_shuffle:-index] mcs_take:([self count] - index)];
+  return [[self mcs_rotate:-index] mcs_take:([self count] - index)];
 }
-
 
 - (NSArray *)mcs_where:(BOOL (^)(id))block
 {
@@ -71,8 +70,8 @@
 
 - (NSArray *)mcs_unique
 {
-  return [self mcs_unique:^BOOL(id obj1, id obj2) {
-    return [obj1 isEqual:obj2];
+  return [self mcs_unique:^BOOL(id object1, id object2) {
+    return [object1 isEqual:object2];
   }];
 }
 
@@ -158,7 +157,7 @@
   [self mcs_each:^(id object) {
     
     [resultArray addObject:object];
-
+    
   }];
   
   return [NSArray arrayWithArray:resultArray];
@@ -175,29 +174,19 @@
 
 - (void)mcs_eachWithIndex:(void (^)(id, NSUInteger))block
 {
-  __block NSUInteger index = 0;
+  NSUInteger index = 0;
   
   for (id object in self) {
     
     block(object, index);
     index++;
-
+    
   }
 }
 
 - (NSInteger)mcs_count:(BOOL (^)(id))block
 {
-  __block NSInteger counter = 0;
-  
-  [self mcs_each:^(id object) {
-    
-    if (block(object)) {
-      counter++;;
-    }
-    
-  }];
-  
-  return counter;
+  return [[self mcs_where:block] count];
 }
 
 - (NSInteger)mcs_minInteger:(NSInteger (^)(id))block
@@ -220,8 +209,9 @@
   [self mcs_each:^(id object) {
     
     min = MIN(min, block(object));
-              
+    
   }];
+  
   return min;
 }
 
@@ -260,7 +250,7 @@
     sum += block(object);
     
   }];
-
+  
   return sum;
 }
 
@@ -273,38 +263,38 @@
     sum += block(object);
     
   }];
-
+  
   return sum;
 }
 
 - (NSInteger)mcs_averageInteger:(NSInteger (^)(id))block
 {
-  return [self mcs_sumInteger:block]/[self count];
+  return [self mcs_hasAnyElement] ? [self mcs_sumInteger:block]/[self count] : 0;
 }
 
 - (CGFloat)mcs_averageFloat:(CGFloat (^)(id))block
 {
-  return [self mcs_sumFloat:block]/[self count];
+  return [self mcs_hasAnyElement] ? [self mcs_sumFloat:block]/[self count] : 0.0;
 }
 
 - (BOOL)mcs_single:(BOOL (^)(id))block
 {
-  return [[self mcs_where:block] count] == 1;
+  return [self mcs_count:block] == 1;
 }
 
 - (BOOL)mcs_any:(BOOL (^)(id))block
 {
-  return [[self mcs_where:block] count] > 0;
+  return [self mcs_count:block] > 0;
 }
 
 - (BOOL)mcs_all:(BOOL (^)(id))block
 {
-  return [[self mcs_where:block] count] == [self count];
+  return [self mcs_count:block] == [self count];
 }
 
 - (NSArray *)mcs_reverse
 {
-  return [[self reverseObjectEnumerator] allObjects];
+  return [[[self reverseObjectEnumerator] allObjects] copy];
 }
 
 - (BOOL)mcs_hasAnyElement
@@ -314,30 +304,20 @@
 
 - (id)mcs_sample
 {
-  return [self count] ? self[arc4random_uniform([self count])] : nil;
+  return [self mcs_hasAnyElement] ? self[arc4random_uniform((u_int32_t)[self count])] : nil;
 }
 
-- (NSArray *)mcs_shuffle:(NSInteger)shuffle
+- (NSArray *)mcs_rotate:(NSInteger)shift
 {
-  NSInteger tmpShuffle = abs(shuffle) % [self count];
-  shuffle = shuffle < 0 ? -tmpShuffle : tmpShuffle; //can't use just '%' because of the problem with NSUInteger and NSInteger type difference
+  shift = shift % (NSInteger)[self count];
+  shift = shift < 0 ? shift + (NSInteger)[self count] : shift;
   
-  if (tmpShuffle == 0) {
+  if (shift == 0) {
     return [self copy];
   }
   
-  NSRange leftRange, rightRange;
-  NSInteger crossPoint = (shuffle > 0) ? shuffle : [self count] - abs(shuffle);
-
-  if (shuffle) {
-    leftRange = NSMakeRange([self count] - crossPoint, crossPoint);
-    rightRange = NSMakeRange(0, [self count] - crossPoint);
-    
-  } else {
-    leftRange = NSMakeRange(0, crossPoint);
-    rightRange = NSMakeRange(crossPoint, [self count] - crossPoint);
-    
-  }
+  NSRange leftRange = NSMakeRange([self count] - shift, shift);
+  NSRange rightRange = NSMakeRange(0, [self count] - shift);
   
   NSArray *leftArray = [self subarrayWithRange:leftRange];
   NSArray *rightArray = [self subarrayWithRange:rightRange];
@@ -381,19 +361,9 @@
   return [self sortedArrayUsingSelector:@selector(compare:)];
 }
 
-- (NSArray *)mcs_sort:(NSString *)name
-{
-  return [self sortedArrayUsingSelector:NSSelectorFromString(name)];
-}
-
 - (NSArray *)mcs_sortInDescendingOrder
 {
   return [[self mcs_sort] mcs_reverse];
 }
 
-- (NSArray *)mcs_sortInDescendingOrder:(NSString *)name
-{
-  return [[self mcs_sort:name] mcs_reverse];
-}
-          
 @end

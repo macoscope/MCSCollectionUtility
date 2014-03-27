@@ -1,23 +1,24 @@
 //
-//  NSDictionary+MCKUtilities.m
-//  MCKCOllectionsOperations
+//  NSDictionary+MCSCollectionUtilities.m
+//  MCSCollectionUtilities
 //
 //  Created by Rafal Augustyniak on 15.03.2014.
-//  Copyright (c) 2014 Rafał. All rights reserved.
+//  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
-#import "NSDictionary+MCSUtilities.h"
+#import "NSDictionary+MCSCollectionUtilities.h"
+#import "NSArray+MCSCollectionUtilities.h"
 
-@implementation NSDictionary (MCKUtilities)
+@implementation NSDictionary (MCSCollectionUtilities)
 
-- (void)mcs_each:(void (^)(NSString *, id))block
+- (void)mcs_each:(void (^)(id <NSCopying>, id))block
 {
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
     block(key, obj);
   }];
 }
 
-- (NSDictionary *)mcs_where:(BOOL (^)(NSString *, id))block
+- (NSDictionary *)mcs_where:(BOOL (^)(id <NSCopying>, id))block
 {
   NSMutableDictionary *resultDictionary = [[NSMutableDictionary alloc] init];
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -29,9 +30,19 @@
   return [NSDictionary dictionaryWithDictionary:resultDictionary];
 }
 
-- (NSArray *)mcs_sortedKeysArray:(NSComparator)block
+- (NSArray *)mcs_sortedKeysArray
+{
+  return [[self allKeys] mcs_sort];
+}
+
+- (NSArray *)mcs_sortedKeysArray:(NSComparisonResult (^)(id <NSCopying> key1, id <NSCopying> key2))block
 {
   return [[self allKeys] sortedArrayUsingComparator:block];
+}
+
+- (NSArray *)mcs_sortedValuesArray
+{
+  return [[self allValues] mcs_sort];
 }
 
 - (NSArray *)mcs_sortedValuesArray:(NSComparator)block
@@ -39,7 +50,7 @@
   return [[self allValues] sortedArrayUsingComparator:block];
 }
 
-- (NSInteger)mcs_count:(BOOL (^)(NSString *, id))block
+- (NSInteger)mcs_count:(BOOL (^)(id <NSCopying>, id))block
 {
   __block NSInteger counter = 0;
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -51,7 +62,7 @@
   return counter;
 }
 
-- (NSInteger)mcs_minInteger:(NSInteger (^)(NSString *, id))block
+- (NSInteger)mcs_minInteger:(NSInteger (^)(id <NSCopying>, id))block
 {
   __block NSInteger min = NSIntegerMax;
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -64,7 +75,7 @@
   return min;
 }
 
-- (CGFloat)mcs_minFloat:(CGFloat (^)(NSString *, id))block
+- (CGFloat)mcs_minFloat:(CGFloat (^)(id <NSCopying>, id))block
 {
   __block CGFloat min = CGFLOAT_MAX;
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -77,7 +88,7 @@
   return min;
 }
 
-- (NSInteger)mcs_maxInteger:(NSInteger (^)(NSString *, id))block
+- (NSInteger)mcs_maxInteger:(NSInteger (^)(id <NSCopying>, id))block
 {
   __block NSInteger max = NSIntegerMin;
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -90,7 +101,7 @@
   return max;
 }
 
-- (CGFloat)mcs_maxFloat:(CGFloat (^)(NSString *, id))block
+- (CGFloat)mcs_maxFloat:(CGFloat (^)(id <NSCopying>, id))block
 {
   __block CGFloat max = CGFLOAT_MIN;
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -103,7 +114,7 @@
   return max;
 }
 
-- (NSInteger)mcs_sumInteger:(NSInteger (^)(NSString *, id))block
+- (NSInteger)mcs_sumInteger:(NSInteger (^)(id <NSCopying>, id))block
 {
   __block NSInteger sum = 0;
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -113,7 +124,7 @@
   return sum;
 }
 
-- (CGFloat)mcs_sumFloat:(CGFloat (^)(NSString *, id))block
+- (CGFloat)mcs_sumFloat:(CGFloat (^)(id <NSCopying>, id))block
 {
   __block CGFloat sum = 0;
   [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -123,27 +134,27 @@
   return sum;
 }
 
-- (NSInteger)mcs_averageInteger:(NSInteger (^)(NSString *, id))block
+- (NSInteger)mcs_averageInteger:(NSInteger (^)(id <NSCopying>, id))block
 {
-  return [self mcs_sumInteger:block]/[self count];
+  return [self mcs_hasAnyElement] ? [self mcs_sumInteger:block]/[self count] : 0;
 }
 
-- (CGFloat)mcs_averageFloat:(CGFloat (^)(NSString *, id))block
+- (CGFloat)mcs_averageFloat:(CGFloat (^)(id <NSCopying>, id))block
 {
-  return [self mcs_sumFloat:block]/[self count];
+  return [self mcs_hasAnyElement] ? [self mcs_sumFloat:block]/[self count] : 0.0;
 }
 
-- (BOOL)mcs_single:(BOOL (^)(NSString *, id))block
+- (BOOL)mcs_single:(BOOL (^)(id <NSCopying>, id))block
 {
   return [self mcs_count:block] == 1;
 }
 
-- (BOOL)mcs_any:(BOOL (^)(NSString *, id))block
+- (BOOL)mcs_any:(BOOL (^)(id <NSCopying>, id))block
 {
   return [self mcs_count:block] > 0;
 }
 
-- (BOOL)mcs_all:(BOOL (^)(NSString *, id))block
+- (BOOL)mcs_all:(BOOL (^)(id <NSCopying>, id))block
 {
   return [self mcs_count:block] == [self count];
 }

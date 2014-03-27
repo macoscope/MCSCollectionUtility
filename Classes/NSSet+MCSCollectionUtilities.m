@@ -1,18 +1,18 @@
 //
-//  NSSet+MCSUtilities.m
-//  MCKCOllectionsOperations
+//  NSSet+MCSCollectionUtilities.m
+//  MCSCollectionUtilities
 //
 //  Created by Rafał on 18.03.2014.
-//  Copyright (c) 2014 Rafał. All rights reserved.
+//  Copyright (c) 2014 Macoscope. All rights reserved.
 //
 
-#import "NSSet+MCSUtilities.h"
-#import "NSArray+MCSUtilities.h"
+#import "NSSet+MCSCollectionUtilities.h"
+#import "NSArray+MCSCollectionUtilities.h"
 
-@implementation NSSet (MCSUtilities)
+@implementation NSSet (MCSCollectionUtilities)
 
 
-- (NSArray *)mcs_sorted:(NSComparator)block
+- (NSArray *)mcs_sort:(NSComparator)block
 {
   NSArray *resultArray = [self allObjects];
   return [resultArray sortedArrayUsingComparator:block];
@@ -23,7 +23,6 @@
   NSArray *resultArray = [[self allObjects] mcs_where:block];
   return [NSSet setWithArray:resultArray];
 }
-
 
 - (NSSet *)mcs_union:(NSSet *)set
 {
@@ -109,12 +108,12 @@
 
 - (NSInteger)mcs_averageInteger:(NSInteger (^)(id))block
 {
-  return [self mcs_sumInteger:block]/[self count];
+  return [self mcs_hasAnyElement] ?  [self mcs_sumInteger:block]/[self count] : 0;
 }
 
 - (CGFloat)mcs_averageFloat:(CGFloat (^)(id))block
 {
-  return [self mcs_sumFloat:block]/[self count];
+  return [self mcs_hasAnyElement] ?  [self mcs_sumFloat:block]/[self count] : 0.0;
 }
 
 - (BOOL)mcs_single:(BOOL (^)(id))block

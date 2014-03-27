@@ -126,7 +126,7 @@ Returns number of elements of the receiving array for which evaluation of the sp
 
     - (NSInteger)mcs_minInteger:(NSInteger(^)(id object))block;
 
-Returns a minimal *NSinteger* value from the values received as the result of transformations of the elements of the receiving array using specified block.
+Returns a minimal *NSInteger* value from the values received as the result of transformations of the elements of the receiving array using specified block.
 
 
     - (CGFloat)mcs_minFloat:(CGFloat(^)(id object))block;
@@ -136,7 +136,7 @@ Returns a minimal *CGFloat* value from the values received as the result of tran
 
     - (NSInteger)mcs_maxInteger:(NSInteger(^)(id object))block;
     
- Returns a maximal *NSInteter* value from the values received as the result of transformations of the elements of the receiving array using specified block.
+ Returns a maximal *NSInteger* value from the values received as the result of transformations of the elements of the receiving array using specified block.
  
     - (CGFloat)mcs_maxFloat:(CGFloat(^)(id object))block;
     
@@ -195,20 +195,27 @@ Returns one random object from the receiving array;
     
 Returns a new array containing *count* random objects of thje receiving array;
 
-
-    - (NSArray *)mcs_shuffle:(NSInteger)count;
+    - (NSArray *)mcs_rotate:(NSInteger)count;
     
-Returns a new array which elements shuffled by *count*. When count is greater than *0* elements are shuffled to right and when count is less than *0* elements are shuffled to the left.
+Returns a new array which elements rotated by *count*. When *count* is greater than *0* indexes of the elements are increased by *count* and when count is less than *0* indexes of elements are decreased by *count*. Array is treated as circle array.
+
+	- (NSArray *)mcs_sort;
+	
+Returns a new array which elements of the receiving array sorted using `compare:` selector.
+	
+	- (NSArray *)mcs_sortInDescendingOrder;
+	
+Returns a new array which elements of the receiving array sorted in descending order using `compare:` selector.
 
 
 
 ##NSDictionary 
 
-    - (void)mcs_each:(void(^)(NSString *key, id object))block;
+    - (void)mcs_each:(void(^)(id <NSCopying> key, id object))block;
     
 Enumerates through elements of the receiving dictionary and evaluates specified block for each pair key-value contained in it. 
 
-    - (NSDictionary *)mcs_where:(BOOL(^)(NSString *key, id object))block;
+    - (NSDictionary *)mcs_where:(BOOL(^)(id <NSCopying> key, id object))block;
 
 Returns a new dictionary containing key-value pairs of the received dictionary for which specified block returned value equal to `YES`.
 
@@ -216,64 +223,63 @@ Returns a new dictionary containing key-value pairs of the received dictionary f
     
 Returns a new array containing keys of the receiving dictionary ordered using *compare:* selector.
 
-    - (NSArray *)mcs_sortedKeys:(NSComparator)block;
+	- (NSArray *)mcs_sortedKeysArray:(NSComparisonResult(^)(id <NSCopying> key1, id <NSCopying> key2))block;
     
 Returns a new array containing keys of the receiving dictionary ordered using specified block. 
     
-    - (NSArrat *)mcs_sortedValues;
+    - (NSArrat *)mcs_sortedValuesArray;
     
 Returns a new array containing values of the receiving dictionary ordered using *compare:* selector.
     
-    - (NSArray *)mcs_sortedValues:(NSComparator)block;
+    - (NSArray *)mcs_sortedValuesArray:(NSComparator)block;
     
 Returns a new array containing values of the receiving dictionary ordered using specified block;
 
-
-    - (NSInteger)mcs_count:(BOOL(^)(NSString *key, id object))block;
+    - (NSInteger)mcs_count:(BOOL(^)(id <NSCopying> key, id object))block;
 
 Returns number of key-value pairs of the receiving dictionary for which evaluation of the specified block returns value equal to *YES*.
 
-    - (NSInteger)mcs_minInteger:(NSInteger(^)(NSString *key, id object))block;
+    - (NSInteger)mcs_minInteger:(NSInteger(^)(id <NSCopying> key, id object))block;
 
-Returns a minimal *NSinteger* value from the values received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
+Returns a minimal *NSInteger* value from the values received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
 
-    - (CGFloat)mcs_minFloat:(CGFloat(^)(NSString *key, id object))block;
+    - (CGFloat)mcs_minFloat:(CGFloat(^)(id <NSCopying> key, id object))block;
 
 Returns a minimal *CGFloat* value from the values received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
 
-    - (NSInteger)mcs_maxInteger:(NSInteger(^)(NSString *key, id object))block;
+    - (NSInteger)mcs_maxInteger:(NSInteger(^)(id <NSCopying> key, id object))block;
 
- Returns a maximal *NSInteter* value from the values received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
+ Returns a maximal *NSInteger* value from the values received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
 
-	- (CGFloat)mcs_maxFloat:(CGFloat(^)(NSString *key, id object))block;
+	- (CGFloat)mcs_maxFloat:(CGFloat(^)(id <NSCopying> key, id object))block;
 
 Returns a minimal *CGFloat* value from the values received as the result of transformations of the key-values of the receiving dictionary using specified block.
 
-	- (NSInteger)mcs_sumInteger:(NSInteger(^)(NSString *key, id object))block;
+	- (NSInteger)mcs_sumInteger:(NSInteger(^)(id <NSCopying> key, id object))block;
 
 Returns a sum of the *NSInteger* values received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
 
-	- (CGFloat)mcs_sumFloat:(CGFloat(^)(NSString *key, id object))block;
+	- (CGFloat)mcs_sumFloat:(CGFloat(^)(id <NSCopying> key, id object))block;
 	
 Returns a sum of the *CGFloat* values received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
 
-	- (NSInteger)mcs_averageInteger:(NSInteger(^)(NSString *key, id object))block;
+	- (NSInteger)mcs_averageInteger:(NSInteger(^)(id <NSCopying> key, id object))block;
 
 Returns an average *NSInteger* value received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
 
-	- (CGFloat)mcs_averageFloat:(CGFloat(^)(NSString *key, id object))block;
+	- (CGFloat)mcs_averageFloat:(CGFloat(^)(id <NSCopying> key, id object))block;
 
 Returns an average *CGFloat* value received as the result of transformations of the key-value pairs of the receiving dictionary using specified block.
 
-	- (BOOL)mcs_single:(BOOL(^)(NSString *key, id object))block;
+	- (BOOL)mcs_single:(BOOL(^)(id <NSCopying> key, id object))block;
 
 Returns *YES* when evaluation of the specified block returns value equal to *YES* for exactly one key-value pair of the receiving dictionary.
 
-    - (BOOL)mcs_any:(BOOL(^)(NSString *key, id object))block;
+    - (BOOL)mcs_any:(BOOL(^)(id <NSCopying> key, id object))block;
 
 Returns *YES* when evaluation of the specified block returns value equal to *YES* for at least one key-value pair of the receiving dictionary.
 
-    - (BOOL)mcs_all:(BOOL(^)(NSString *key, id object))block;
+    - (BOOL)mcs_all:(BOOL(^)(id <NSCopying> key, id object))block;
 
 Returns *YES* when evaluation of the specified block returns value equal to *YES* for all key-value pairs of the receiving dictionary.
 
@@ -291,9 +297,9 @@ Returns *YES* when there is at least one key-value pair in the receiving diction
 
 Enumerates through elements of the receiving set and evaluates specified block for each of them. 
 
-    - (NSArray *)mcs_sorted:(NSComparator)block;
+    - (NSArray *)mcs_sort:(NSComparator)block;
     
-Returns a new set containing elements of the receiving set ordered using specified block.
+Returns a new array containing elements of the receiving set ordered using specified block.
 
     - (NSSet *)mcs_where:(BOOL(^)(id object))block;
 
