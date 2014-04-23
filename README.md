@@ -1,6 +1,5 @@
 
 
-
 ##MCSCollectionUtility
 
 Categories for `NSArray`, `NSSet` and `NSDictionary` which provide many methods which make operations on collection easier and cleaner. 
@@ -40,7 +39,7 @@ Take the elements of the array as long as they are smaller than 10. Stop when fi
 
 Create array with only one representation of the each element.
 
-	NSArray *elements = @["1", @"2", "3", @"1", @"4"];
+	NSArray *elements = @[@"1", @"2", @"3", @"1", @"4"];
 	
 	NSArray *newElementsArray = [elements mcs_unique]; 
 
