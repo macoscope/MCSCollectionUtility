@@ -11,6 +11,10 @@ To use MCSCollectionUtility in your app just drag 'Classes' folder to yout proje
 
     #import "MCSCollectionUtility.h"
     
+####Podfile
+
+    pod "MCSCollectionUtility", "~> 1.0.0" 
+    
 ##Examples
 
 As there are o lot of methods available in created categories these examples provide only small portion of it. More effort was put in creation of the documentation which is available below the examples (section Documentation).
@@ -20,7 +24,7 @@ Check how many elements of the array contains strings which contain letter 'a'.
 
     NSArray *elements = @[@"Warsaw", @"Berlin", @"London", @"New York", @"Paris"];
    
-    NSInteger count = [elements mcs_count:BOOL^(NSString *object) {
+    NSInteger count = [elements mcs_count:^BOOL(NSString *object) {
     	return [object rangeOfString:@"a"].location != NSNotFound;
     }];
     
@@ -31,7 +35,7 @@ Take the elements of the array as long as they are smaller than 10. Stop when fi
     
 	NSArray *elements = @[@"1", @"5", @"7", @"10", @"16", @"8"];
 	
-	NSArray *newElementsArray = [elements mcs_takeWhile:BOOL^(NSNumber *object) {
+	NSArray *newElementsArray = [elements mcs_takeWhile:^BOOL(NSNumber *object) {
 		return [object integerValue] < 10;
 	}];
 	
@@ -40,11 +44,11 @@ Take the elements of the array as long as they are smaller than 10. Stop when fi
 
 Create array with only one representation of the each element.
 
-	NSArray *elements = @["1", @"2", "3", @"1", @"4"];
+	NSArray *elements = @[@"1", @"2", @"3", @"1", @"4"];
 	
 	NSArray *newElementsArray = [elements mcs_unique]; 
 
-	//result @["1", @"2", "3", @"4"];
+	//result @["1", @"2", @"3", @"4"];
 	
 
  
