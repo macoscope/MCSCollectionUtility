@@ -1,6 +1,5 @@
 
 
-
 ##MCSCollectionUtility
 
 Categories for `NSArray`, `NSSet` and `NSDictionary` which provide many methods which make operations on collection easier and cleaner. 
