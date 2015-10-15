@@ -156,7 +156,7 @@
   
   [self mcs_each:^(id object) {
     
-    [resultArray addObject:object];
+    [resultArray addObject:block(object)];
     
   }];
   
